@@ -39,10 +39,9 @@ void ATankPlayerController::AimTowardsCrosshair()
 	FVector HitLocation; //Out parameter
 	if (GetSightRayHitLocation(HitLocation))// Has "side-effect; is going to line trace
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *(HitLocation.ToString()))
+		//UE_LOG(LogTemp, Warning, TEXT("Sight direction: "), *(HitLocation.ToString()))
 		// TODO Tell controlled tank to aim at this point
 	}
-	
 	
 }
 
@@ -60,8 +59,10 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &OutHitLocation) cons
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		// Line-trace along that LookDirection, and see what we hit (up to a max range)
-		GetLookVectorHitLocation(LookDirection, OutHitLocation);
-	
+		if (GetLookVectorHitLocation(LookDirection, OutHitLocation))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Sight direction: "), *(OutHitLocation.ToString()))
+		}
 	}
 
 	// Line-trace along that look direction, and see what we hit (up to max range)
@@ -81,27 +82,25 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector &
 
 bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector &HitLocation) const
 {
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetPlayerViewPoint(
+		PlayerViewPointLocation,
+		PlayerViewPointRotation
+	);
+	UWorld* World = GetWorld();
+	FVector HitStart = PlayerViewPointLocation;
+	FVector HitEnd = PlayerViewPointLocation + LookDirection * LineTraceRange;
+	FCollisionQueryParams TraceParams(FName(), false, GetOwner());
+	FCollisionResponseParams ResponseParams();
 	
-	//UWorld* World = GetWorld();
-	FHitResult OutHit;
-	FVector HitStart = PlayerCameraManager->GetCameraLocation();
-	FVector HitEnd = HitStart + LookDirection * LineTraceRange;
-	FCollisionResponseParams ResponseParams;
-	
-	if (GetWorld()->LineTraceSingleByChannel
+	return GetWorld()->LineTraceSingleByChannel
 	(
-		OutHit,
+		HitLocation,
 		HitStart,
 		HitEnd,
-		ECollisionChannel::ECC_Visibility
-	))
-	{
-		HitLocation = OutHit.Location;
-		return true;
-	}
-	else 
-	{ 
-		HitLocation = FVector(0);
-		return false; 
-	}
+		ECollisionChannel::ECC_Visibility,
+		TraceParams,
+		ResponseParams
+	);
 }
