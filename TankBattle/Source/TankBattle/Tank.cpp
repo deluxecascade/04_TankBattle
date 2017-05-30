@@ -23,7 +23,7 @@ void ATank::BeginPlay()
 void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	// AimTowardsCrosshair();
 }
 
 // Called to bind functionality to input
