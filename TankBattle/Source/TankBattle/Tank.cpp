@@ -2,6 +2,8 @@
 
 #include "TankBattle.h"
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
+#include "Projectile.h"
 #include "Tank.h"
 
 
@@ -26,6 +28,7 @@ void ATank::BeginPlay()
 void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
+	Barrel = BarrelToSet;
 }
 
 void ATank::SetTurretReference(UTankTurret* TurretToSet)
@@ -56,4 +59,23 @@ void ATank::AimAt(FVector HitLocation)
 void ATank::Fire()
 {
 	UE_LOG(LogTemp, Warning, TEXT("FIRE!!"))
+
+	if (!Barrel) { return; }
+
+	GetWorld()->SpawnActor<AProjectile>(
+		ProjectileBlueprint,
+		Barrel->GetSocketLocation(FName("Projectile")),
+		Barrel->GetSocketRotation(FName("Projectile"))
+		 );
 }
+
+//Not sure why the variables cause the SpawnActor function to not compile
+//auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
+//auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
+////Spawn projectile on the end of the barrel
+//
+//GetWorld->SpawnActor<AProjectile>(
+//	ProjectileBlueprint,
+//	ProjectileLocation,
+//	ProjectileRotation
+//	);
