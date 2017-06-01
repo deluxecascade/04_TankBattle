@@ -54,14 +54,23 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		StartLocation,
 		HitLocation,
 		LaunchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace)
 		)
 	
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("AimDirection: %s"), *AimDirection.ToString())
-			MoveBarrelTowards(AimDirection);
+		auto Time = GetWorld()->GetTimeSeconds();
+		//UE_LOG(LogTemp, Warning, TEXT("At %f AimDirection: %s"), Time,*AimDirection.ToString())
+		MoveBarrelTowards(AimDirection);
 			
+	}
+	else
+	{
+		auto Time = GetWorld()->GetTimeSeconds();
+		//UE_LOG(LogTemp, Warning, TEXT("No AimAt Solution"), Time)
 	}
 }
 
@@ -74,6 +83,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 	
 
-
-	Barrel->Elevate(5); // TODO remove magic number
+	/* Tells barrel to elevate up or down depending on whether the 
+	 AimDirection is asking for something higher or lower than the current barrel position*/
+	Barrel->Elevate(DeltaRotator.Pitch); 
 }

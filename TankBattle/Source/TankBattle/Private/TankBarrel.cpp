@@ -6,9 +6,15 @@
 
 
 
-void UTankBarrel::Elevate(float DegreesPerSecond)
+void UTankBarrel::Elevate(float RelativeSpeed)
 {
 	//move the barrel the right amount this frame
 	// Given a max elevation speed, and theframe time
-	UE_LOG(LogTemp, Warning, TEXT("Elevate has been called at speed: %f"), DegreesPerSecond)
+	RelativeSpeed = FMath::Clamp<float>(RelativeSpeed, -1, 1);
+	auto ElevationChange = RelativeSpeed * MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
+	UE_LOG(LogTemp, Warning, TEXT("ElevationChange: %f at %f"), ElevationChange, GetWorld()->DeltaTimeSeconds)
+	auto RawNewElevation = RelativeRotation.Pitch + ElevationChange;
+	auto Elevation = FMath::Clamp<float>(RawNewElevation, MinElevation, MaxElevation);
+
+	SetRelativeRotation(FRotator(Elevation, 0, 0));
 }

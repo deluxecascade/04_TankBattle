@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankBattle.h"
+#include "TankAimingComponent.h"
 #include "Tank.h"
 
 
@@ -27,12 +28,12 @@ void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
 }
 
-// Called every frame
-void ATank::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	// AimTowardsCrosshair();
-}
+//// Called every frame
+//void ATank::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//	// AimTowardsCrosshair();
+//}
 
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
