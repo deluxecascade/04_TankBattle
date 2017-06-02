@@ -14,11 +14,7 @@ void ATankPlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("PlayerController can't find tank"));
 	}
-	else
-	{ 
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController has possession of %s"), *(ControlledTank->GetName()));
-	}
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController begin play"));
+	
 	
 }
 
