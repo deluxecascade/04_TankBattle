@@ -47,6 +47,9 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 
 	auto AIForward = FVector::DotProduct(TankForward, AIForwardIntention);
+	auto AIRotate = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
+	UE_LOG(LogTemp, Warning, TEXT("AIRotate: %f"), AIRotate)
 
-	IntendMoveForward(AIForward);
+	//IntendMoveForward(AIForward);
+	IntendTurnRight(AIRotate); // TODO figure out why it won't turn on its own; with forward turned off
 }
