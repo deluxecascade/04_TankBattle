@@ -27,13 +27,11 @@ class TANKBATTLE_API UTankAimingComponent : public UActorComponent
 
 public:	
 	// Sets default values for this component's properties
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+
 	UTankAimingComponent();
 
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	void SetTurretReference(UTankTurret* TurretToSet);
-
-	//TODO Add set turret reference
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -45,11 +43,12 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringState FiringState = EFiringState::Reloading;
-
-private:
+	EFiringState FiringState = EFiringState::Locked;
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+
+private:
+	
 	
 	void MoveBarrelTowards(FVector AimDirection);
 

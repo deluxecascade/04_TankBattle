@@ -9,7 +9,7 @@ class UTankBarrel;
 class UTankTurret;
 class AProjectile;
 class UTankAimingComponent;
-class UTankMovementComponent;
+
 
 UCLASS()
 class TANKBATTLE_API ATank : public APawn
@@ -22,11 +22,7 @@ public:
 
 	void AimAt(FVector HitLocation);
 
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetTurretReference(UTankTurret* TurretToSet);
+	
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
@@ -35,11 +31,8 @@ public:
 
 protected:
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	UTankAimingComponent* TankAimingComponent = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
-	UTankMovementComponent* TankMovementComponent = nullptr;
 
 private:	
 
@@ -49,8 +42,7 @@ private:
 	//// Called every frame
 	//virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 40000; //TODO find sensible default
@@ -62,9 +54,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTime = 3;
 
-	// Local Barrel setter
 	UTankBarrel* Barrel = nullptr;
-
 
 	double LastFireTime = 0;
 	

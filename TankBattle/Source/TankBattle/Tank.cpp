@@ -2,7 +2,7 @@
 
 #include "TankBattle.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
+
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "Tank.h"
@@ -15,7 +15,9 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//No need to protect points as added at constrution
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	auto TankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%s DONKEY: Tank C++ Construct"), *TankName)
 
 }
 
@@ -23,19 +25,10 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	auto TankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%s DONKEY: Tank C++ BeginPlay"), *TankName)
 }
 
-void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	TankAimingComponent->SetBarrelReference(BarrelToSet);
-	Barrel = BarrelToSet;
-}
-
-void ATank::SetTurretReference(UTankTurret* TurretToSet)
-{
-	TankAimingComponent->SetTurretReference(TurretToSet);
-}
 
 //// Called every frame
 //void ATank::Tick(float DeltaTime)
@@ -44,23 +37,20 @@ void ATank::SetTurretReference(UTankTurret* TurretToSet)
 //	// AimTowardsCrosshair();
 //}
 
-// Called to bind functionality to input
-void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-}
 
 void ATank::AimAt(FVector HitLocation)
 {
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 	
 }
 
 void ATank::Fire()
 {
+	if (!ensure(Barrel)) { return; }
 	bool IsReloaded = ((FPlatformTime::Seconds() - LastFireTime) > ReloadTime);
-	if (Barrel && IsReloaded) 
+	if (IsReloaded) 
 	{
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
 			ProjectileBlueprint,
