@@ -48,8 +48,8 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 
 	auto AIForward = FVector::DotProduct(TankForward, AIForwardIntention);
 	auto AIRotate = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
-	UE_LOG(LogTemp, Warning, TEXT("AIRotate: %f"), AIRotate)
 
-	//IntendMoveForward(AIForward);
-	IntendTurnRight(AIRotate); // TODO figure out why it won't turn on its own; with forward turned off
+
+	IntendMoveForward(AIForward);
+	IntendTurnRight(AIRotate); // TODO limit double forward and turn 
 }
