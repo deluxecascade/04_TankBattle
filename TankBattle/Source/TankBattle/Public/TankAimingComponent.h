@@ -36,7 +36,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void AimAt(FVector HitLocation, float LaunchSpeed);
+	void AimAt(FVector HitLocation);
+
+	
 
 protected:
 	// Called when the game starts
@@ -49,6 +51,8 @@ protected:
 
 private:
 	
+	float LaunchSpeed = 40000; //TODO find sensible default
+
 	void MoveBarrelTowards(FVector AimDirection);
 
 	

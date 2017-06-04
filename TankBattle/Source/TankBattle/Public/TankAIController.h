@@ -5,7 +5,8 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
+
+class UTankAimingComponent;
 /**
  * 
  */
@@ -21,8 +22,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	UTankAimingComponent* AimingComponent = nullptr;
 
 	float AcceptanceRadius = 300;
-	
+
+
 
 };
