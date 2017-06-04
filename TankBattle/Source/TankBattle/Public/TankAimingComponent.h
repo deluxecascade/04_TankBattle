@@ -5,7 +5,7 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
-
+class AProjectile;
 // ENUM for firing states
 UENUM()
 enum class EFiringState : uint8
@@ -32,13 +32,13 @@ public:
 
 	UTankAimingComponent();
 
-
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void AimAt(FVector HitLocation);
 
-	
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Fire();
 
 protected:
 	// Called when the game starts
@@ -51,9 +51,17 @@ protected:
 
 private:
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 40000; //TODO find sensible default
 
-	void MoveBarrelTowards(FVector AimDirection);
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTime = 3;
+
+	double LastFireTime = 0;
+
+	void MoveBarrelTowards(FVector AimDirection);
 	
 };

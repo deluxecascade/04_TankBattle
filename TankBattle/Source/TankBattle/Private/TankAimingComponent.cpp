@@ -4,6 +4,7 @@
 #include "TankBattle.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
 
 
@@ -43,9 +44,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-
 }
-
 
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -101,10 +100,36 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	
-
 	/* Tells barrel to elevate up or down depending on whether the 
 	 AimDirection is asking for something higher or lower than the current barrel position*/
 	Barrel->Elevate(DeltaRotator.Pitch); 
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(Barrel)) { return; }
+	bool IsReloaded = ((FPlatformTime::Seconds() - LastFireTime) > ReloadTime);
+	if (IsReloaded)
+	{
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+
+
+		//Not sure why the variables cause the SpawnActor function to not compile
+		//auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
+		//auto ProjectileRotation = Barrel->GetSocketRotation(FName("Projectile"));
+		////Spawn projectile on the end of the barrel
+		//
+		//GetWorld->SpawnActor<AProjectile>(
+		//	ProjectileBlueprint,
+		//	ProjectileLocation,
+		//	ProjectileRotation
+		//	);
+	}
 }

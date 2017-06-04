@@ -7,7 +7,7 @@
 
 class UTankBarrel;
 class UTankTurret;
-class AProjectile;
+
 
 
 
@@ -20,18 +20,6 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	void AimAt(FVector HitLocation);
-
-	
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void Fire();
-
-
-
-protected:
-
-
 private:	
 
 	// Called when the game starts or when spawned
@@ -39,21 +27,4 @@ private:
 
 	//// Called every frame
 	//virtual void Tick(float DeltaTime) override;
-
-
-
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 40000; //TODO find sensible default
-
-
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	TSubclassOf<AProjectile> ProjectileBlueprint;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float ReloadTime = 3;
-
-	UTankBarrel* Barrel = nullptr;
-
-	double LastFireTime = 0;
-	
 };

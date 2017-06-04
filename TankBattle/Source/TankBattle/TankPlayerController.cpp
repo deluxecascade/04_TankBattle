@@ -25,8 +25,8 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
-	if (!ensure(AimingComponent)) { return; }
+//	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+//	if (!ensure(AimingComponent)) { return; }
 
 	FVector HitLocation; //Out parameter
 	if (GetSightRayHitLocation(HitLocation))// Has "side-effect; is going to line trace
