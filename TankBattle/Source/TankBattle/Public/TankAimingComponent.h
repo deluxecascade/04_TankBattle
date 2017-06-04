@@ -46,11 +46,13 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Locked;
+
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
 private:
-	
+	FVector AimDirection;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 40000; //TODO find sensible default
 
@@ -64,4 +66,5 @@ private:
 
 	void MoveBarrelTowards(FVector AimDirection);
 	
+	bool IsBarrelMoving();
 };

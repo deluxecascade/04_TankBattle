@@ -14,10 +14,17 @@ class TANKBATTLE_API UTankTrack : public UStaticMeshComponent
 	GENERATED_BODY()
 
 public:
+	UTankTrack();
+
+	
+
 	UFUNCTION(BlueprintCallable, Category = "Input")
 		void SetThrottle(float Throttle);
 
 	// In Newtons assuming 40000kg at 1g acceleration
 	UPROPERTY(EditDefaultsOnly)
 		float TrackMaxDrivingForce = 400000;
+
+private:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 };
