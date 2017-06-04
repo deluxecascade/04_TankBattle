@@ -49,7 +49,6 @@ protected:
 
 private:
 	
-	
 	void MoveBarrelTowards(FVector AimDirection);
 
 	
