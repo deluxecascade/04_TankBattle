@@ -170,7 +170,7 @@ void UTankAimingComponent::Fire()
 	}
 }
 
-int UTankAimingComponent::GetAmmo() 
+int32 UTankAimingComponent::GetAmmo() 
 {
 	return Ammo;
 }
