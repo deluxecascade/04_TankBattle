@@ -24,7 +24,8 @@ public:
 private:
 	UTankAimingComponent* AimingComponent = nullptr;
 
-	float AcceptanceRadius = 300;
+	UPROPERTY (EditDefaultsOnly, Category = "Movement")
+	float AcceptanceRadius = 8000;
 
 
 

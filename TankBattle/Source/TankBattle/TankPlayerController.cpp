@@ -30,7 +30,8 @@ void ATankPlayerController::AimTowardsCrosshair()
 	if (!ensure(AimingComponent)) { return; }
 
 	FVector HitLocation; //Out parameter
-	if (GetSightRayHitLocation(HitLocation))// Has "side-effect; is going to line trace
+	bool bGetHitLocation = GetSightRayHitLocation(HitLocation);
+	if (bGetHitLocation)// Has "side-effect; is going to line trace
 	{
 		// Tell controlled tank to aim at this point
 		AimingComponent->AimAt(HitLocation);
@@ -55,12 +56,12 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &OutHitLocation) cons
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
 		// Line-trace along that LookDirection, and see what we hit (up to a max range)
-		GetLookVectorHitLocation(LookDirection, OutHitLocation);
+		return GetLookVectorHitLocation(LookDirection, OutHitLocation);
 	
 	}
 
 	// Line-trace along that look direction, and see what we hit (up to max range)
-	return true;
+	return false;
 }
 
 

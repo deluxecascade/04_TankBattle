@@ -12,7 +12,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 // Forward Declaration
@@ -40,6 +41,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Fire();
 
+	EFiringState GetFiringState() const;
+
+	UFUNCTION(BlueprintCallable)
+	int GetAmmo();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -51,6 +57,10 @@ protected:
 	UTankTurret* Turret = nullptr;
 
 private:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int Ammo = 3;
+
 	FVector AimDirection;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")

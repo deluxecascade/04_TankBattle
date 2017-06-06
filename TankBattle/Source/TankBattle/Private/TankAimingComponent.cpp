@@ -46,7 +46,13 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 	bool IsReloaded = ((FPlatformTime::Seconds() - LastFireTime) > ReloadTime);
 
-	if (!IsReloaded)
+	bool OutOfAmmo = (Ammo <= 0);
+
+	if (OutOfAmmo)
+	{
+		FiringState = EFiringState::OutOfAmmo;
+	}
+	else if (!IsReloaded)
 	{
 		FiringState = EFiringState::Reloading;
 	}
@@ -59,6 +65,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		FiringState = EFiringState::Locked;
 	}
 
+}
+
+EFiringState UTankAimingComponent::GetFiringState() const
+{
+	return FiringState;
 }
 
 bool UTankAimingComponent::IsBarrelMoving()
@@ -111,6 +122,19 @@ void UTankAimingComponent::MoveBarrelTowards(FVector InAimDirection)
 	auto AimAsRotator = InAimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
+	// Keeps the turret rotator below 180 so it always uses the shortest rotation possible
+	if (DeltaRotator.Yaw > 180)
+	{
+		DeltaRotator.Yaw = -(360 - DeltaRotator.Yaw);
+	}
+
+	if (DeltaRotator.Yaw < -180)
+	{
+		DeltaRotator.Yaw = (360 + DeltaRotator.Yaw);
+	}
+
+
+
 	/* Tells barrel to elevate up or down depending on whether the 
 	 AimDirection is asking for something higher or lower than the current barrel position*/
 	Barrel->Elevate(DeltaRotator.Pitch); 
@@ -118,7 +142,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector InAimDirection)
 }
 void UTankAimingComponent::Fire()
 {
-	if (FiringState != EFiringState::Reloading)
+	if ((FiringState != EFiringState::Reloading) && (FiringState != EFiringState::OutOfAmmo))
 	{
 		if (!ensure(Barrel)) { return; }
 		if (!ensure(ProjectileBlueprint)) { return; }
@@ -131,6 +155,7 @@ void UTankAimingComponent::Fire()
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
 
+		Ammo--;
 
 		//Not sure why the variables cause the SpawnActor function to not compile
 		//auto ProjectileLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -145,3 +170,7 @@ void UTankAimingComponent::Fire()
 	}
 }
 
+int UTankAimingComponent::GetAmmo() 
+{
+	return Ammo;
+}
