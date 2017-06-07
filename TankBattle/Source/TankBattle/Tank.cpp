@@ -23,6 +23,22 @@ void ATank::BeginPlay()
 }
 
 
+float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const &DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+{
+	int32 DamagePoints = FPlatformMath::RoundToInt(DamageAmount);
+	int32 DamageToApply = FMath::Clamp<int>(DamagePoints, 0, CurrentHealth);
+
+	CurrentHealth -= DamageToApply;
+
+	UE_LOG(LogTemp, Warning, TEXT("DamageAmount = %f, DamageToApply = %i"), DamageAmount, DamageToApply)
+	return DamageToApply;
+}
+
+float ATank::GetHealthPercentage() const
+{
+	return (float)CurrentHealth / (float)StartingHealth;
+}
+
 //// Called every frame
 //void ATank::Tick(float DeltaTime)
 //{

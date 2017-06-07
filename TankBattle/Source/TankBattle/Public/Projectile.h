@@ -41,8 +41,14 @@ private:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-	UPROPERTY(EditDefaultsOnly, Category = "Destroy")
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float DestroyDelay = 5;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float ProjectileDamage = 20;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DamageRadius = 1000;
 
 	void DestroyTimerDelegate();
 };
