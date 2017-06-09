@@ -20,6 +20,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	auto TankName = GetName();
+	CurrentHealth = StartingHealth;
 }
 
 
@@ -30,7 +31,11 @@ float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const &DamageEve
 
 	CurrentHealth -= DamageToApply;
 
-	UE_LOG(LogTemp, Warning, TEXT("DamageAmount = %f, DamageToApply = %i"), DamageAmount, DamageToApply)
+	if (CurrentHealth <= 0)
+	{
+		OnDeath.Broadcast();
+	}
+
 	return DamageToApply;
 }
 

@@ -19,7 +19,9 @@ class TANKBATTLE_API ATankPlayerController : public APlayerController
 public:
 		
 	virtual void BeginPlay() override;
-
+	
+	virtual void SetPawn(APawn* InPawn) override;
+	
 	virtual void Tick(float DeltaTime) override;
 
 protected:
@@ -31,6 +33,8 @@ protected:
 
 
 private:
+	UFUNCTION()
+	void DelegateDeathMethod();
 
 	UTankAimingComponent* AimingComponent = nullptr;
 
